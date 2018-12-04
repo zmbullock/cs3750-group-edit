@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                      http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+  version="3.1">
+
+<!--
+    <servlet>
+        <servlet-name>cs3750</servlet-name>
+        <servlet-class>cs3750.HelloWorld</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+      <servlet-name>cs3750</servlet-name>
+      <url-pattern>/hello</url-pattern>
+    </servlet-mapping>
+-->
+
+  <!-- ==================== Default Welcome File List ===================== -->
+  <!-- When a request URI refers to a directory, the default servlet looks  -->
+  <!-- for a "welcome file" within that directory and, if present, to the   -->
+  <!-- corresponding resource URI for display.                              -->
+  <!-- If no welcome files are present, the default servlet either serves a -->
+  <!-- directory listing (see default servlet configuration on how to       -->
+  <!-- customize) or returns a 404 status, depending on the value of the    -->
+  <!-- listings setting.                                                    -->
+  <!--                                                                      -->
+  <!-- If you define welcome files in your own application's web.xml        -->
+  <!-- deployment descriptor, that list *replaces* the list configured      -->
+  <!-- here, so be sure to include any of the default values that you wish  -->
+  <!-- to use within your application.                                       -->
+
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.htm</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+</web-app>

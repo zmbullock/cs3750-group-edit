@@ -1,2 +1,2 @@
-# cs3750-group-edit
-Web group edit page
+# cs3750-java-speed
+Web java speed game for cs3750
