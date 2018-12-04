@@ -1,0 +1,182 @@
+body {
+    background-color: #492365;
+}
+
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: #aa989c;
+}
+
+li {
+	float: left;
+	border-right: 1px solid white;
+}
+
+li:last-child {
+	border-right: none;
+}
+
+li a {
+	display: block;
+	color: white;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+}
+
+li a:hover {
+	background-color: #575047
+}
+
+li a:focus {
+	background-color: #575047
+}
+
+.proj {
+	visibility: visible;
+}
+
+.dropdown {
+	position: relative;
+	display: inline-block;
+}
+
+.dropdown-content {
+	display: none;
+	position: absolute;
+	background-color: #f1f1f1;
+	min-width: 160px;
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	z-index: 1;
+}
+
+.dropdown-content a {
+	color: black;
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+}
+
+.dropdown-content a:hover {
+	background-color: #ddd
+}
+
+.dropdown:hover .dropdown-content {
+	display: block;
+}
+
+header {
+	text-align: center;
+	color: white;
+	z-index: -1;
+	visibility: visible;
+}
+
+.logo {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	padding-top: 50px;
+	width: 55%;
+	font-style: oblique;
+	font-size: 400px;
+	background: align-center;
+	z-index: 0;
+	visibility: visible;
+}
+/*
+.block1 {
+	display: block;
+	background-color: white;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-top: 10px;
+	width: 98%;
+	height: 150px;
+	font-style: oblique;
+	font-size: 11px;	
+	background: align-left;
+	z-index: 0;
+}
+*/
+
+/*
+.field1 {
+	display: block;
+	color: white;
+	z-index: 1;
+	width: 98%;
+	height: 150px;
+	margin-left: 2px;
+	margin-right: 2px;
+	padding-top: 0.35em;
+	padding-bottom: 0.625em;
+	padding-left: 0.75em;
+	padding-right: 0.75em;
+	border: 2px groove (internal value);
+}
+*/
+
+.block {
+	display: inline-block;
+	color: white;
+	z-index: 1;
+	width: 98%;
+	height: 180px;
+	margin-left: 2px;
+	margin-right: 2px;
+	padding-top: 0.35em;
+	padding-bottom: 0.625em;
+	padding-left: 0.75em;
+	padding-right: 0.75em;
+	border: 2px groove (internal value);
+}
+
+.lock input[type='radio'] {
+	display: none;
+}
+
+.lock {
+/*	content: " ";
+	display: inline-block;
+	position: relative;
+	top: 5px;
+	margin: 0 5px 0 0;
+	width: 20px;
+	height: 20px;			*/
+	border-radius: 11px;
+	border: 2px solid #004c97;
+	background-color: transparent;
+}
+
+.lock input[type=radio]:checked {
+/*	border-radius: 11px;
+	border: 2px solid #004c97;
+	background-color: transparent;
+	background: green;
+	color: red;				*/
+	border-radius: 11px;
+	width: 12px;
+	height: 12px;
+	position: absolute;
+	top: 9px;
+	left: 10px;
+	content: " ";
+	display: block;
+	background: #004c97;
+}
+
+
+
+
+
+
+
+
+
+
+
+
