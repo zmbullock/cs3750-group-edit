@@ -1,9 +1,6 @@
 package net.sqlitetutorial;
  
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class DBinterface {
  
@@ -30,17 +27,15 @@ public class DBinterface {
      */
      
     public void update(String group, String content) {
-        String sql = "UPDATE warehouses SET name = ? , "
-                + "capacity = ? "
-                + "WHERE id = ?";
+        String sql = "UPDATE Content SET work_text = ? "
+                + "WHERE work_group = ?";
  
         try (Connection conn = this.connect();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
  
             // set the corresponding param
-            pstmt.setString(1, name);
-            pstmt.setDouble(2, capacity);
-            pstmt.setInt(3, id);
+            pstmt.setString(1, content);
+            pstmt.setString(2, group);
             // update 
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -48,14 +43,23 @@ public class DBinterface {
         }
     }
  
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        
-        UpdateApp app = new UpdateApp();
-        // update the warehouse with id 3
-        app.update(3, "Finished Products", 5500);
+    public Map get(String group){
+        String sql = "SELECT * FROM Content";
+        Map<String,String> valmap = new HashMap<String,String>();
+     
+        try (Connection conn = this.connect();
+            Statement stmt  = conn.createStatement();
+            ResultSet rs    = stmt.executeQuery(sql)){
+            
+            // loop through the result set
+            while (rs.next()) {
+                valmap.put(rs.getString("work_group"),rs.getString("work_text"));
+            }
+            return valmap;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+     
     }
  
 }
