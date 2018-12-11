@@ -3,6 +3,7 @@ package websocket;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonWriter;
+import javax.json.JsonReader;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -23,6 +24,8 @@ import javax.websocket.Session;
 @ServerEndpoint("/serverendpointdemo")
 public class ServerEndpointDemo {
 
+  GroupManager gm = new GroupManager();
+
   //open connection to client
   @OnOpen
   public void handleOpen(Session userSession) {
@@ -32,6 +35,43 @@ public class ServerEndpointDemo {
   //exchange message with client
   @OnMessage
   public void handleMessage(String message, Session userSession) throws IOException{
+    JsonObject json = Json.createReader(new StringReader(message)).readObject();
+    switch(json.getString("messageType"))
+    {
+      case "setGroup":
+        gm.setGroup(userSession, json.getString("groupName");
+        break;
+      case "lockTextArea":
+        int textAreaNumber = json.getInt("textAreaNumber");
+        String groupName = json.getString("groupName");
+
+        gm.lockTextArea(userSession, textAreaNumber);
+        List<Session> users = gm.getUsersFromGroup(groupName);
+        Map<String, String> messageMap = new HashMap<>();
+
+        messageMap.put("responseType", "lock");
+        messageMap.put("groupName", groupName);
+        messageMap.put("textAreaNumber", textAreaNumber);
+
+        for(Session user : users)
+        {
+          if(user != userSession)
+          {
+            user.getBasicRemote().sendText(buildJsonData(messageMap));
+          }
+        }
+        break;
+      case "unlockTextArea":
+        break;
+      case "sendTextAreaText":
+        break;
+      case "deleteTextArea":
+        break;
+      case "addTextArea":
+        break;
+    }
+
+
     /* // Chatroom reference code
      String username = (String)userSession.getUserProperties().get("username");
      if(username == null) {
@@ -54,6 +94,19 @@ public class ServerEndpointDemo {
     */
   }
   
+  private String buildJsonData(Map<String, String> map) {
+    JsonObject jsonObject = new JsonObject();
+    for(Map.Entry<String, String> entry : map.entrySet())
+    {
+      
+    }
+    JsonObject jsonObject = Json.createObjectBuilder().add(key, value).build();
+    StringWriter stringWriter = new StringWriter();
+    try(JsonWriter jsonWriter = Json.createWriter(stringWriter)) {
+      jsonWriter.write(jsonObject);
+    }
+    return stringWriter.toString();
+  }
   private String buildJsonData(String key, String value) {
      JsonObject jsonObject = Json.createObjectBuilder().add(key, value).build();
      StringWriter stringWriter = new StringWriter();
