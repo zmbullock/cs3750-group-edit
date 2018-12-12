@@ -28,12 +28,14 @@
 </head>
 
 <body>
+	<!-- Top menu bar -->
 	<div class="navbar">
+		<!-- Home -->
 		<a href="multiuserProjectTracker.html">Home</a>
 		<div class="dropdown">
-			<button class="dropbtn">Groups 
-				<i class="fa fa-caret-down"></i>
-			</button>
+			<!-- Group Button -->
+			<button class="dropbtn">Groups </button>
+			<!-- Dropdown list -->
 			<div id="groups" class="dropdown-content">
 				<a id="A" href="group.html">GroupA</a>
 				<a id="B" href="group.html">GroupB</a>
@@ -42,9 +44,9 @@
 			</div>
 		</div> 
 		<div class="dropdown">
-			<button class="dropbtn">Projects 
-				<i class="fa fa-caret-down"></i>
-			</button>
+			<!-- Project Button -->
+			<button class="dropbtn">Projects </button>
+			<!-- Dropdown list -->
 			<div id="groups" class="dropdown-content">
 				<a id="1" href="#group.html">Project1</a>
 				<a id="2" href="#group.html">Project2</a>
@@ -52,122 +54,70 @@
 				<a id="4" href="#group.html">Project4</a>
 			</div>
 		</div> 
+		<br><br>
 	</div>
-	
-<!--	
-	<div class="menu">
-		<ul>
-			<li><a class="active" href="multiuserProjectTracker.html">Home</a></li>
-			<li class="dropdown"><a href="#group" class="dropdown-toggle" data-toggle="dropdown">Groups</a>
-				<ul class="dropdown-content">
-					<input type="text" name="group"></li>
-					<li><a href="#addGroup">Add Group</a></li>
-					<li><a href="#group1">Group1</a></li>
-					<li><a href="#group2">Group2</a></li>
-					<li><a href="#group3">Group3</a></li>
-				</ul>
-			</li>
-			<li><a class="proj" href="#projects">Projects</a></li>
-			<li><a href="#about">About</a></li>
-		</ul>
-	</div>
--->
-	
-	<header>	
-		<!-- <h1> Multi-User Project Tracker </h1> -->
-		<!-- <nav> Defines a set of naviation links </nav> -->
-	</header>
-	
+
+	<!-- Text Field -->
 	<section class="block">
-		<fieldset class="field1">
+		<fieldset id="field1" class="field" onclick="edit(id)">
+			<!-- Block title -->
 			<legend>Project1</legend>
-				<input class="lock" class="button" type="radio" value="proj1" style="background-color:red">Lock<br>
-				<textarea style="resize:none" rows="8" cols="192" name="txtarea_1" ></textarea>	<!-- resize: none; -->
+				<!-- Lock status -->
+				<label class="lock">locked
+					<!-- Radio button for lock status -->
+					<input type="radio" checked="checked" value="proj1" ><br>
+					<textarea style="resize:none" rows="8" cols="192" name="txtarea_1" ></textarea>	<!-- resize: none; -->
+					<span class="checkmark"></span>
+				</label>
 		</fieldset>
 	</section>
 	
+	<!-- Text Field -->
 	<section class="block">
-		<fieldset class="field2">
+		<fieldset id="field2" class="field" onclick="edit(id)">
+		<!-- Block title -->
 			<legend>Project2</legend>
-				<input class="lock" type="radio" value="proj2" color="red">Lock<br>
-				<textarea style="resize:none" rows="8" cols="192" name="txtarea_2" ></textarea>
-			<!-- <button id="lock" type="button" style="radio" color="green"> -->
+			<!-- Lock status -->
+				<label class="lock">edit
+					<input type="radio" value="proj2" ><br>
+					<textarea style="resize:none" rows="8" cols="192" name="txtarea_2" ></textarea>
+					<span class="checkmark"></span>
+				</label>
 		</fieldset>
 	</section>
 	
+	<!-- Text Field -->
 	<section class="block">
-		<fieldset class="field3">
+		<fieldset id="field3" class="field" onclick="edit(id)">
+		<!-- Block title -->
 			<legend>Project3</legend>
-				<input class="lock" type="radio" value="proj3" color="red">Lock<br>
-				<textarea style="resize:none" rows="8" cols="192" name="txtarea_3" ></textarea>
-			<!-- <button id="lock" type="button" style="radio" color="green"> -->
+			<!-- Lock status -->
+				<label class="lock">edit
+					<input id="lock1" type="radio" value="proj3" onclick="buttonClick(id)><br>
+					<textarea style="resize:none" rows="8" cols="192" name="txtarea_3" ></textarea>
+					<span class="checkmark"></span>
+				</label>
 		</fieldset>
 	</section>
 	
+	<!-- Text Field -->
 	<section class="block">
-		<fieldset class="field4">
+		<fieldset id="field4" class="field" onclick="edit(id)">
+		<!-- Block title -->
 			<legend>Project4</legend>
-				<input class="lock" type="radio" value="proj4" color="red">Lock<br>
-				<textarea style="resize:none" rows="8" cols="192" name="txtarea_4" ></textarea>
-			<!-- <button id="lock" type="button" style="radio" color="green"> -->
+			<!-- Lock status -->
+				<label class="lock">edit
+					<input type="radio" value="proj4" ><br>
+					<textarea style="resize:none" rows="8" cols="192" name="txtarea_4" ></textarea>
+					<span class="checkmark"></span>
+				</label>
 		</fieldset>
 	</section>
 	
+	<!-- Waldo the cat screen logo -->
 	<div class="logo">
-		<img id="weberLogo" class="logo" src="img/athletics_stacked.png" alt="wcLogo">  <!-- style="width:150px;height:170px;"> -->
-		<!-- <img id="weberLogo" class="logo" src="img/weber_state.png" alt="wcLogo"> -->
+		<img id="weberLogo" class="logo" src="img/athletics_stacked.png" alt="wcLogo">
 	</div>
-	
-		<div id="mpt" class="gameAction">
-			<h1></h1>
-		</div>
-		
-		<section>
-			<header></header>
-		</section>
-		
-		<form>
-			<!--
-			<div class="container">
-				<label class="container">One
-				<input type="radio" checked="checked" name="radio">
-				<span class="checkmark"></span>
-				</label>
-				<label class="container">Two
-				<input type="radio" name="radio">
-				<span class="checkmark"></span>
-				</label>
-				<label class="container">Three
-				<input type="radio" name="radio">
-				<span class="checkmark"></span>
-				</label>
-				<label class="container">Four
-				<input type="radio" name="radio">
-				<span class="checkmark"></span>
-				</label>
-			</div>	
-			-->
-			
-			<!--  -->
-			<div class="  ">
-		
-			</div>
-			
-			<!--  -->				
-			<div class="   ">
-		
-			</div>
-		
-			<br />
-		
-			<div >
-				<!-- <button id="gameButton" class="button" type="button" value="btnSubmit" onClick="buttonClick()">Start</button> -->
-			</div>
-		</form>
-	
-	<footer>
-		<nav>	</nav>
-	</footer>
 	<script src="mpt.js"></script>
 </body>
 </html>
