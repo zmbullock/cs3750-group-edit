@@ -7,11 +7,11 @@ function WebsocketManager()
   // ----------------
 
   /// @param string groupName
-  /// @param int textAreaNumber
+  // wsm.setGroup("B");
   this.setGroup = function(groupName)
   {
     // Will send request here.
-    websocket.send(JSON.Stringify({
+    websocket.send(JSON.stringify({
       messageType: "setGroup",
       groupName: groupName
     }));
@@ -22,7 +22,7 @@ function WebsocketManager()
   this.lockTextArea = function(groupName, textAreaNumber)
   {
     // Will send request here.
-    websocket.send(JSON.Stringify({
+    websocket.send(JSON.stringify({
       messageType: "lockTextArea",
       groupName: groupName,
       textAreaNumber: textAreaNumber
@@ -34,7 +34,7 @@ function WebsocketManager()
   this.unlockTextArea = function(groupName, textAreaNumber)
   {
     // Will send request here.
-    websocket.send(JSON.Stringify({
+    websocket.send(JSON.stringify({
       messageType: "unlockTextArea",
       groupName: groupName,
       textAreaNumber: textAreaNumber
@@ -47,7 +47,7 @@ function WebsocketManager()
   this.sendTextAreaText = function(groupName, textAreaNumber, text)
   {
     // Will send update here.
-    websocket.send(JSON.Stringify({
+    websocket.send(JSON.stringify({
       messageType: "sendTextAreaText",
       groupName: groupName,
       textAreaNumber: textAreaNumber,
@@ -60,7 +60,7 @@ function WebsocketManager()
   this.deleteTextArea = function(groupName, textAreaNumber)
   {
     // Will send update here.
-    websocket.send(JSON.Stringify({
+    websocket.send(JSON.stringify({
       messageType: "deleteTextArea",
       groupName: groupName,
       textAreaNumber: textAreaNumber
@@ -71,7 +71,7 @@ function WebsocketManager()
   this.addTextArea = function(groupName)
   {
     // Will send update here.
-    websocket.send(JSON.Stringify({
+    websocket.send(JSON.stringify({
       messageType: "addTextArea",
       groupName: groupName
     }));
@@ -82,7 +82,8 @@ function WebsocketManager()
   /// @param string groupName
   /// @param int textAreaNumber
   /// @param string text
-  this.onReceiveText = function(groupName, textAreaNumber, text) {}
+  /// @param int (0 or 1) isLocked
+  this.onReceiveText = function(groupName, textAreaNumber, text, isLocked) {}
 
   /// @param string groupName
   /// @param int textAreaNumber
@@ -101,7 +102,6 @@ function WebsocketManager()
   /// @param string groupName
   /// @param int textAreaNumber
   this.onReceiveUnlockTextArea = function(groupName, textAreaNumber) {}
-
  
   // ----------------
   // --- Private: ---
@@ -120,7 +120,7 @@ function WebsocketManager()
       switch(response.responseType)
       {
         case "text":
-          that.onReceiveText(response.groupName, response.textAreaNumber, response.text);
+          that.onReceiveText(response.groupName, response.textAreaNumber, response.text, response.isLocked);
           break;
         case "delete":
           that.onReceiveDeleteTextArea(response.groupName, response.textAreaNumber);
@@ -146,3 +146,33 @@ function WebsocketManager()
   websocket.onmessage = processMessage(message)
 }
 
+function testWebSocketManager()
+{
+  WebSocketManager wsm = new WebSocketManager();
+
+  wsm.onReceiveUnlockTextArea = function(groupName, textAreaNumber)
+  {
+    // What do I do with info from the server...
+  }
+
+  // groupName - String
+  // textAreaNumber - int
+  // text - String
+  wsm.onReceiveText = function(groupName, textAreaNumber, text)
+  {
+    textAreaNumber.text = text;
+    // What do I do with info from the server...
+  }
+
+  // To send a message to the server...
+  // var groupName = document.getElementById("Dropdownmenu").getDropdownElemt...;
+  // var textAreaNumber = 2;
+  wsm.unlockTextArea(groupName, textAreaNumber);
+}
+
+/*
+<html>
+<script src="WebSocketManager.js"></script>
+<script src="Your.js"></script>
+</html>
+*/

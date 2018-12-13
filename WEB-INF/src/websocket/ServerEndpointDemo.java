@@ -1,16 +1,14 @@
 package websocket;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonWriter;
-import javax.json.JsonReader;
+import groupManager.GroupManager;
+import database.DatabaseManager;
+
+import javax.json.*;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.io.StringReader;
+import java.util.*;
 import javax.websocket.server.ServerEndpoint;
 import javax.websocket.OnOpen;
 import javax.websocket.OnClose;
@@ -25,11 +23,16 @@ import javax.websocket.Session;
 public class ServerEndpointDemo {
 
   GroupManager gm = new GroupManager();
+  DatabaseManager dbm = new DatabaseManager();
+  String groupName = "";
+  int textAreaNumber = 0;
+  List<Session> usersInGroup = new ArrayList<>();
 
   //open connection to client
   @OnOpen
-  public void handleOpen(Session userSession) {
-
+  public void handleOpen(Session userSession) 
+  {
+    gm.onOpen(userSession);
   }
   
   //exchange message with client
@@ -39,21 +42,41 @@ public class ServerEndpointDemo {
     switch(json.getString("messageType"))
     {
       case "setGroup":
-        gm.setGroup(userSession, json.getString("groupName");
+        gm.onSetGroup(userSession, json.getString("groupName"));
+       
+        for(int i = 1; i <= dbm.getNumOfTextAreas(groupName); i++)
+        { 
+          String text = dbm.getText(groupName, i);
+          Map<String, String> messageMap = new HashMap<>();
+          messageMap.put("responseType", "text");
+          messageMap.put("groupName", groupName);
+          messageMap.put("textAreaNumber", Integer.toString(i));
+          messageMap.put("text", text);
+          messageMap.put("isLocked", 
+            gm.isLocked(groupName, i)
+              ? "1" : "0");
+
+          userSession.getBasicRemote().sendText(buildJsonData(messageMap));
+        }
+        
         break;
       case "lockTextArea":
-        int textAreaNumber = json.getInt("textAreaNumber");
-        String groupName = json.getString("groupName");
 
-        gm.lockTextArea(userSession, textAreaNumber);
-        List<Session> users = gm.getUsersFromGroup(groupName);
+        groupName = json.getString("groupName");
+
+        gm.onLockTextArea(userSession, textAreaNumber);
+        usersInGroup = gm.getUsersFromGroup(groupName);
+        if(usersInGroup == null)
+        {
+          break;
+        }
         Map<String, String> messageMap = new HashMap<>();
 
         messageMap.put("responseType", "lock");
         messageMap.put("groupName", groupName);
-        messageMap.put("textAreaNumber", textAreaNumber);
-
-        for(Session user : users)
+        messageMap.put("textAreaNumber", Integer.toString(textAreaNumber));
+      
+        for(Session user : usersInGroup)
         {
           if(user != userSession)
           {
@@ -62,13 +85,72 @@ public class ServerEndpointDemo {
         }
         break;
       case "unlockTextArea":
+        textAreaNumber = json.getInt("textAreaNumber");
+        groupName = json.getString("groupName");
+
+        boolean sendUnlock = gm.onUnlockTextArea(userSession, textAreaNumber);
+        if(!sendUnlock)
+        {
+          break;
+        }
+        
+        usersInGroup = gm.getUsersFromGroup(groupName);
+        if(usersInGroup == null)
+        {
+          break;
+        }
+        messageMap = new HashMap<>();
+        messageMap.put("responseType", "unlock");
+        messageMap.put("groupName", groupName);
+        messageMap.put("textAreaNumber", Integer.toString(textAreaNumber));
+
+        for(Session user : usersInGroup)
+        {
+          if(user != userSession)
+          {
+            user.getBasicRemote().sendText(buildJsonData(messageMap));
+          }
+        }
+
         break;
       case "sendTextAreaText":
+        textAreaNumber = json.getInt("textAreaNumber");
+        groupName = json.getString("groupName");
+        String text = json.getString("text");
+
+        if(!gm.hasLock(userSession, groupName, textAreaNumber))
+        {
+          break;
+        }
+        if(!dbm.updateText(groupName, textAreaNumber, text))
+        {
+          break;
+        }
+        
+        usersInGroup = gm.getUsersFromGroup(groupName);
+        if(usersInGroup == null)
+        {
+          break;
+        }
+        messageMap = new HashMap<>();
+        messageMap.put("responseType", "text");
+        messageMap.put("groupName", groupName);
+        messageMap.put("textAreaNumber", Integer.toString(textAreaNumber));
+        messageMap.put("text", text);
+        messageMap.put("isLocked", "1");
+
+        for(Session user : usersInGroup)
+        {
+          if(user != userSession)
+          {
+            user.getBasicRemote().sendText(buildJsonData(messageMap));
+          }
+        }
         break;
-      case "deleteTextArea":
-        break;
-      case "addTextArea":
-        break;
+      /*case "deleteTextArea":
+        break;*/
+      /*case "addTextArea":
+        break;*/
     }
 
 
@@ -92,27 +174,20 @@ public class ServerEndpointDemo {
     chatroomUsers.remove(userSession);
     System.out.println("client is now disconnected..");
     */
+    gm.onClose(userSession);
   }
   
   private String buildJsonData(Map<String, String> map) {
-    JsonObject jsonObject = new JsonObject();
+    JsonObjectBuilder job = Json.createObjectBuilder();
     for(Map.Entry<String, String> entry : map.entrySet())
     {
-      
+      job.add(entry.getKey(), entry.getValue());
     }
-    JsonObject jsonObject = Json.createObjectBuilder().add(key, value).build();
+    JsonObject json = job.build();
     StringWriter stringWriter = new StringWriter();
     try(JsonWriter jsonWriter = Json.createWriter(stringWriter)) {
-      jsonWriter.write(jsonObject);
+      jsonWriter.write(json);
     }
-    return stringWriter.toString();
-  }
-  private String buildJsonData(String key, String value) {
-     JsonObject jsonObject = Json.createObjectBuilder().add(key, value).build();
-     StringWriter stringWriter = new StringWriter();
-     try(JsonWriter jsonWriter = Json.createWriter(stringWriter)) {
-       jsonWriter.write(jsonObject);
-     }
     return stringWriter.toString();
   }
 }

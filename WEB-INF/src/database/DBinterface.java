@@ -1,3 +1,5 @@
+package database;
+
 import java.sql.*;
 
 import java.util.Map;
@@ -5,18 +7,18 @@ import java.util.HashMap;
 
 public class DBinterface {
 
- 
+  Connection conn = null;
+
   // Public constructor
   public DBinterface()
   {
-
     try
     {
-      Connection conn = DriverManager.getConnection("jdbc:sqlite:test.db");
+      conn = DriverManager.getConnection("jdbc:sqlite:test.db");
       Statement statement = conn.createStatement();
       statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
-      statement.executeUpdate("CREATE TABLE IF NOT EXISTS Content (work_text string, work_group string)");
+//      statement.executeUpdate("CREATE TABLE IF NOT EXISTS Content (work_group string, work_text string)");
     }
     catch(SQLException e)
     {
@@ -45,7 +47,7 @@ public class DBinterface {
     try
     {
       // create a database connection
-      Connection conn = DriverManager.getConnection("jdbc:sqlite:test.db");
+      conn = DriverManager.getConnection("jdbc:sqlite:test.db");
       Statement statement = conn.createStatement();
       statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
@@ -57,28 +59,15 @@ public class DBinterface {
       // it probably means no database file is found
       System.err.printf("Error in insert: %s\n", e.getMessage());
     }
-    finally
-    {
-      try
-      {
-        if(conn != null)
-          conn.close();
-      }
-      catch(SQLException e)
-      {
-        // connection close failed.
-        System.err.printf("Error in close: %s\n", e.getMessage());
-      }
-    }
   }
   
-  // TODO add functionality for individual work_text_number
+  // TODO add functinality for individual work_text_number
   public void update(String work_group, String work_text) {
     String sql = "UPDATE Content SET work_text = ? "
                + "WHERE work_group = ?";
 
-    try (Connection conn = this.connect();
-      PreparedStatement pstmt = conn.prepareStatement(sql)) {
+    try (Connection connection = this.connect();
+      PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
       // set the corresponding param
       pstmt.setString(1, work_text);
@@ -88,19 +77,6 @@ public class DBinterface {
     } catch (SQLException e) {
       System.err.printf("Error in update: %s\n", e.getMessage());
     }
-    finally
-    {
-      try
-      {
-        if(conn != null)
-          conn.close();
-      }
-      catch(SQLException e)
-      {
-        // connection close failed.
-        System.err.printf("Error in close: %s\n", e.getMessage());
-      }
-    }
   }
 
   // TODO 
@@ -109,12 +85,12 @@ public class DBinterface {
 
   }
 
-  public Map get(String group){
+  public Map<String, String> get(String group){
     String sql = "SELECT * FROM Content";
     Map<String,String> valmap = new HashMap<String,String>();
    
-    try (Connection conn = this.connect();
-      Statement stmt  = conn.createStatement();
+    try (Connection connection = this.connect();
+      Statement stmt  = connection.createStatement();
       ResultSet rs    = stmt.executeQuery(sql)){
       
       // loop through the result set
@@ -123,19 +99,6 @@ public class DBinterface {
       }
     } catch (SQLException e) {
       System.err.printf("Error in get: %s\n", e.getMessage());
-    }
-    finally
-    {
-      try
-      {
-        if(conn != null)
-          conn.close();
-      }
-      catch(SQLException e)
-      {
-        // connection close failed.
-        System.err.printf("Error in close: %s\n", e.getMessage());
-      }
     }
    
     return valmap;
@@ -146,7 +109,7 @@ public class DBinterface {
   private Connection connect() {
     // SQLite connection string
     String url = "jdbc:sqlite:test.db";
-    Connection conn = null;
+    conn = null;
     try {
       conn = DriverManager.getConnection(url);
     } catch (SQLException e) {
