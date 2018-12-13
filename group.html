@@ -23,7 +23,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="description" content="CS3750 Multiuser Project Tracker" />
     <meta name="keywords" content="Multiuser Project Tracker TextEditor" />
-    <meta name="author" content="Doug Bentley, Jamison, Mark, David Penrod" />
+    <meta name="author" content="Doug Bentley, Jamison Lewis, Mark Bullock, David Penrod" />
 
 </head>
 
@@ -37,38 +37,26 @@
 			<button class="dropbtn">Groups </button>
 			<!-- Dropdown list -->
 			<div id="groups" class="dropdown-content">
-				<a id="A" href="group.html">GroupA</a>
-				<a id="B" href="group.html">GroupB</a>
-				<a id="C" href="group.html">GroupC</a>
-				<a id="D" href="group.html">GroupD</a>
+				<a onclick="test(0,'A')" id="A" href="#group.html">GroupA</a>
+				<a onclick="test(0,'B')" id="B" href="#group.html">GroupB</a>
+				<a onclick="test(0,'C')" id="C" href="#group.html">GroupC</a>
+				<a onclick="test(0,'D')" id="D" href="#group.html">GroupD</a>
 			</div>
 		</div> 
-		<div class="dropdown">
-			<!-- Project Button -->
-			<button class="dropbtn">Projects </button>
-			<!-- Dropdown list -->
-			<div id="groups" class="dropdown-content">
-				<a id="1" href="#group.html">Project1</a>
-				<a id="2" href="#group.html">Project2</a>
-				<a id="3" href="#group.html">Project3</a>
-				<a id="4" href="#group.html">Project4</a>
-			</div>
-		</div> 
-		<br><br>
 	</div>
 
 	<!-- Text Field -->
 	<section class="block">
-		<fieldset id="field1" class="field" onclick="edit(id)">
+		<fieldset id="field1a" class="field">
 			<!-- Block title -->
 			<legend>Project1</legend>
-				<!-- Lock status -->
-				<label class="lock">locked
 					<!-- Radio button for lock status -->
-					<input type="radio" checked="checked" value="proj1" ><br>
-					<textarea style="resize:none" rows="8" cols="192" name="txtarea_1" ></textarea>	<!-- resize: none; -->
-					<span class="checkmark"></span>
-				</label>
+				<div>
+					<input id="l1" type="radio" value="proj1" name="lock1" onclick="test(1,1)">Locked
+					<input id="u1" type="radio" checked="true" value="proj1" name="lock1" onclick="test(2,1)">Unlocked<br>
+				</div>
+				<textarea id="1" style="resize:none" rows="8" cols="192" name="txtarea_1" ></textarea>	<!-- resize: none; -->
+				<span class="checkmark"></span>
 		</fieldset>
 	</section>
 	
@@ -77,12 +65,12 @@
 		<fieldset id="field2" class="field" onclick="edit(id)">
 		<!-- Block title -->
 			<legend>Project2</legend>
-			<!-- Lock status -->
-				<label class="lock">edit
-					<input type="radio" value="proj2" ><br>
-					<textarea style="resize:none" rows="8" cols="192" name="txtarea_2" ></textarea>
-					<span class="checkmark"></span>
-				</label>
+				<div>
+					<input id="l2" type="radio" value="proj1" name="lock2" onclick="test(1,2)">Locked
+					<input id="u2" type="radio" checked="true" value="proj1" name="lock2" onclick="test(2,2)">Unlocked<br>
+				</div>
+				<textarea id="2" style="resize:none" rows="8" cols="192" name="txtarea_2" ></textarea>
+				<span class="checkmark"></span>
 		</fieldset>
 	</section>
 	
@@ -91,12 +79,12 @@
 		<fieldset id="field3" class="field" onclick="edit(id)">
 		<!-- Block title -->
 			<legend>Project3</legend>
-			<!-- Lock status -->
-				<label class="lock">edit
-					<input id="lock1" type="radio" value="proj3" onclick="buttonClick(id)><br>
-					<textarea style="resize:none" rows="8" cols="192" name="txtarea_3" ></textarea>
-					<span class="checkmark"></span>
-				</label>
+				<div>
+					<input id="l3" type="radio" value="proj1" name="lock3" >Locked
+					<input id="u3" type="radio" checked="true" value="proj1" name="lock3" onclick="test(1,3)">Unlocked<br>
+				</div>
+				<textarea id="3" style="resize:none" rows="8" cols="192" name="txtarea_3" onclick="test(2,3)"></textarea>
+				<span class="checkmark"></span>
 		</fieldset>
 	</section>
 	
@@ -105,12 +93,12 @@
 		<fieldset id="field4" class="field" onclick="edit(id)">
 		<!-- Block title -->
 			<legend>Project4</legend>
-			<!-- Lock status -->
-				<label class="lock">edit
-					<input type="radio" value="proj4" ><br>
-					<textarea style="resize:none" rows="8" cols="192" name="txtarea_4" ></textarea>
-					<span class="checkmark"></span>
-				</label>
+				<div>
+					<input id="l4" type="radio" value="proj1" name="lock4" onclick="test(1,4)">Locked
+					<input id="u4" type="radio" checked="true" value="proj1" name="lock4" onclick="test(2,4)">Unlocked<br>
+				</div>
+				<textarea id="4" style="resize:none" rows="8" cols="192" name="txtarea_4" ></textarea>
+				<span class="checkmark"></span>
 		</fieldset>
 	</section>
 	
@@ -118,6 +106,10 @@
 	<div class="logo">
 		<img id="weberLogo" class="logo" src="img/athletics_stacked.png" alt="wcLogo">
 	</div>
-	<script src="mpt.js"></script>
+	<script src="WebSocketManager.js"></script>
+	<script src="functions.js"></script>
+	<script type="text/javascript">
+		window.setInterval(function(){test(3,0);},1000);
+	</script>
 </body>
 </html>
