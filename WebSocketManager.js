@@ -10,6 +10,7 @@ function WebsocketManager()
   // wsm.setGroup("B");
   this.setGroup = function(groupName)
   {
+    console.log("Setting group: " + groupName);
     // Will send request here.
     websocket.send(JSON.stringify({
       messageType: "setGroup",
@@ -83,26 +84,26 @@ function WebsocketManager()
   /// @param int textAreaNumber
   /// @param string text
   /// @param int (0 or 1) isLocked
-  this.onReceiveText = function(groupName, textAreaNumber, text, isLocked) {}
+  this.onReceiveText = function(groupName, textAreaNumber, text, isLocked) {};
 
   /// @param string groupName
   /// @param int textAreaNumber
-  this.onReceiveDeleteTextArea = function(groupName, textAreaNumber) {}
+  this.onReceiveDeleteTextArea = function(groupName, textAreaNumber) {};
 
   /// @param string groupName
-  this.onReceiveAddTextArea = function(groupName) {}
+  this.onReceiveAddTextArea = function(groupName) {};
 
   /// @param string groupName
-  this.onReceiveAddGroup = function(groupName) {}
-
-  /// @param string groupName
-  /// @param int textAreaNumber
-  this.onReceiveLockTextArea = function(groupName, textAreaNumber) {}
+  this.onReceiveAddGroup = function(groupName) {};
 
   /// @param string groupName
   /// @param int textAreaNumber
-  this.onReceiveUnlockTextArea = function(groupName, textAreaNumber) {}
- 
+  this.onReceiveLockTextArea = function(groupName, textAreaNumber) {};
+
+  /// @param string groupName
+  /// @param int textAreaNumber
+  this.onReceiveUnlockTextArea = function(groupName, textAreaNumber) {};
+
   // ----------------
   // --- Private: ---
   // ----------------
@@ -143,9 +144,13 @@ function WebsocketManager()
     }
   }
 
-  websocket.onmessage = processMessage(message)
+  websocket.onmessage = processMessage;
+  websocket.onOpen = function()
+  {
+    that.onReady();
+  };
 }
-
+/*
 function testWebSocketManager()
 {
   WebSocketManager wsm = new WebSocketManager();
@@ -168,7 +173,7 @@ function testWebSocketManager()
   // var groupName = document.getElementById("Dropdownmenu").getDropdownElemt...;
   // var textAreaNumber = 2;
   wsm.unlockTextArea(groupName, textAreaNumber);
-}
+}*/
 
 /*
 <html>

@@ -31,16 +31,16 @@
 	<!-- Top menu bar -->
 	<div class="navbar">
 		<!-- Home -->
-		<a href="multiuserProjectTracker.html">Home</a>
+<!--		<a href="multiuserProjectTracker.html">Home</a>-->
 		<div class="dropdown">
 			<!-- Group Button -->
 			<button class="dropbtn">Groups </button>
 			<!-- Dropdown list -->
 			<div id="groups" class="dropdown-content">
-				<a onclick="test(0,'A')" id="A" href="#group.html">GroupA</a>
-				<a onclick="test(0,'B')" id="B" href="#group.html">GroupB</a>
-				<a onclick="test(0,'C')" id="C" href="#group.html">GroupC</a>
-				<a onclick="test(0,'D')" id="D" href="#group.html">GroupD</a>
+				<a onclick="test(0,'A')" id="A">GroupA</a>
+				<a onclick="test(0,'B')" id="B">GroupB</a>
+				<a onclick="test(0,'C')" id="C">GroupC</a>
+				<a onclick="test(0,'D')" id="D">GroupD</a>
 			</div>
 		</div> 
 	</div>
@@ -62,7 +62,7 @@
 	
 	<!-- Text Field -->
 	<section class="block">
-		<fieldset id="field2" class="field" onclick="edit(id)">
+		<fieldset id="field2" class="field">
 		<!-- Block title -->
 			<legend>Project2</legend>
 				<div>
@@ -76,7 +76,7 @@
 	
 	<!-- Text Field -->
 	<section class="block">
-		<fieldset id="field3" class="field" onclick="edit(id)">
+		<fieldset id="field3" class="field">
 		<!-- Block title -->
 			<legend>Project3</legend>
 				<div>
@@ -90,7 +90,7 @@
 	
 	<!-- Text Field -->
 	<section class="block">
-		<fieldset id="field4" class="field" onclick="edit(id)">
+		<fieldset id="field4" class="field">
 		<!-- Block title -->
 			<legend>Project4</legend>
 				<div>
@@ -109,7 +109,11 @@
 	<script src="WebSocketManager.js"></script>
 	<script src="functions.js"></script>
 	<script type="text/javascript">
-		window.setInterval(function(){test(3,0);},1000);
+		//window.setInterval(function(){test(3,0);},1000);
+                document.getElementById("1").onkeyup = function(){test(3,1)};
+                document.getElementById("2").onkeyup = function(){test(3,2)};
+                document.getElementById("3").onkeyup = function(){test(3,3)};
+                document.getElementById("4").onkeyup = function(){test(3,4)};
 	</script>
 </body>
 </html>

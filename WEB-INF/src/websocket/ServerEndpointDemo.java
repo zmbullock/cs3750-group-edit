@@ -22,8 +22,8 @@ import javax.websocket.Session;
 @ServerEndpoint("/serverendpointdemo")
 public class ServerEndpointDemo {
 
-  GroupManager gm = new GroupManager();
-  DatabaseManager dbm = new DatabaseManager();
+  static GroupManager gm = new GroupManager();
+  static DatabaseManager dbm = new DatabaseManager();
   String groupName = "";
   int textAreaNumber = 0;
   List<Session> usersInGroup = new ArrayList<>();
@@ -39,18 +39,29 @@ public class ServerEndpointDemo {
   @OnMessage
   public void handleMessage(String message, Session userSession) throws IOException{
     JsonObject json = Json.createReader(new StringReader(message)).readObject();
+    if(json == null)
+    {
+      return;
+    }
     switch(json.getString("messageType"))
     {
       case "setGroup":
-        gm.onSetGroup(userSession, json.getString("groupName"));
+        groupName = json.getString("groupName");
+        gm.onSetGroup(userSession, groupName);
        
         for(int i = 1; i <= dbm.getNumOfTextAreas(groupName); i++)
         { 
           String text = dbm.getText(groupName, i);
           Map<String, String> messageMap = new HashMap<>();
           messageMap.put("responseType", "text");
+          if(groupName == null) System.out.println("groupName is null");
           messageMap.put("groupName", groupName);
           messageMap.put("textAreaNumber", Integer.toString(i));
+          if(text == null)
+          {
+            System.out.printf("handleMsg.setGroup - groupName [%s], textAreaNumber (i) [%d]\n", groupName, i);
+            System.out.println("text is null");
+          }
           messageMap.put("text", text);
           messageMap.put("isLocked", 
             gm.isLocked(groupName, i)
@@ -63,6 +74,7 @@ public class ServerEndpointDemo {
       case "lockTextArea":
 
         groupName = json.getString("groupName");
+        textAreaNumber = json.getInt("textAreaNumber");
 
         gm.onLockTextArea(userSession, textAreaNumber);
         usersInGroup = gm.getUsersFromGroup(groupName);
@@ -117,11 +129,26 @@ public class ServerEndpointDemo {
         textAreaNumber = json.getInt("textAreaNumber");
         groupName = json.getString("groupName");
         String text = json.getString("text");
+        /*if(json == null)
+        {
+          System.out.println("NULL json");
+        }
+        else
+        {
+          if(json.getString("groupName") == null)
+          {
+            System.out.println("NULL json.getString(groupName)");
+          }
+        }*/
 
         if(!gm.hasLock(userSession, groupName, textAreaNumber))
         {
           break;
         }
+        System.out.printf("handleMsg.sendTextAreaText - groupName: [%s]\n", groupName);
+        System.out.printf("handleMsg.sendTextAreaText - textAreaNumber: [%d]\n", textAreaNumber);
+        System.out.printf("handleMsg.sendTextAreaText - text: [%s]\n", text);
+        
         if(!dbm.updateText(groupName, textAreaNumber, text))
         {
           break;
@@ -130,7 +157,12 @@ public class ServerEndpointDemo {
         usersInGroup = gm.getUsersFromGroup(groupName);
         if(usersInGroup == null)
         {
+          System.out.println("usersInGroup -- null\n");
           break;
+        }
+        for(Session user : usersInGroup)
+        {
+          System.out.printf("user in group:  -- [%s]\n", user.getId());
         }
         messageMap = new HashMap<>();
         messageMap.put("responseType", "text");
@@ -139,10 +171,13 @@ public class ServerEndpointDemo {
         messageMap.put("text", text);
         messageMap.put("isLocked", "1");
 
+        System.out.printf("handleMsg.sendTextAreaText - How many users in group [%s]?: %d\n", groupName, usersInGroup.size());
         for(Session user : usersInGroup)
         {
+          System.out.printf("handleMsg.sendTextAreaText - Is this user-in-group the sender?: %s\n", ((user != userSession) ? "NO, SEND MESSAGE" : "YES, DON'T SEND"));
           if(user != userSession)
           {
+            System.out.printf("handleMsg.sendTextAreaText - Sending text to user [%s]\n", user.getId());
             user.getBasicRemote().sendText(buildJsonData(messageMap));
           }
         }

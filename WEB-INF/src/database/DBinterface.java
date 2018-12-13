@@ -5,6 +5,7 @@ import java.sql.*;
 import java.util.Map;
 import java.util.HashMap;
 
+
 public class DBinterface {
 
   Connection conn = null;
@@ -14,7 +15,8 @@ public class DBinterface {
   {
     try
     {
-      conn = DriverManager.getConnection("jdbc:sqlite:test.db");
+      Class.forName("org.sqlite.JDBC");
+      conn = DriverManager.getConnection("jdbc:sqlite:/var/lib/tomcat8/webapps/cs3750-group-edit/WEB-INF/src/database/test.db");
       Statement statement = conn.createStatement();
       statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
@@ -23,6 +25,10 @@ public class DBinterface {
     catch(SQLException e)
     {
       System.err.printf("Error in constructor: %s\n", e.getMessage());
+    }
+    catch(Exception ex)
+    {
+      System.err.printf("Error in constructor: %s\n", ex.getMessage());
     }
     finally
     {
@@ -47,7 +53,7 @@ public class DBinterface {
     try
     {
       // create a database connection
-      conn = DriverManager.getConnection("jdbc:sqlite:test.db");
+      conn = DriverManager.getConnection("jdbc:sqlite:/var/lib/tomcat8/webapps/cs3750-group-edit/WEB-INF/src/database/test.db");
       Statement statement = conn.createStatement();
       statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
@@ -66,7 +72,9 @@ public class DBinterface {
     String sql = "UPDATE Content SET work_text = ? "
                + "WHERE work_group = ?";
 
-    try (Connection connection = this.connect();
+    System.out.printf("update: work_group: [%s], work_text: [%s]\n", work_group, work_text);
+
+    try (Connection connection = DriverManager.getConnection("jdbc:sqlite:/var/lib/tomcat8/webapps/cs3750-group-edit/WEB-INF/src/database/test.db");
       PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
       // set the corresponding param
@@ -86,15 +94,17 @@ public class DBinterface {
   }
 
   public Map<String, String> get(String group){
-    String sql = "SELECT * FROM Content";
+    String sql = "SELECT * FROM Content;";
     Map<String,String> valmap = new HashMap<String,String>();
    
-    try (Connection connection = this.connect();
+    try (Connection connection = DriverManager.getConnection("jdbc:sqlite:/var/lib/tomcat8/webapps/cs3750-group-edit/WEB-INF/src/database/test.db");
       Statement stmt  = connection.createStatement();
       ResultSet rs    = stmt.executeQuery(sql)){
       
       // loop through the result set
       while (rs.next()) {
+        System.out.printf("rs.getString(work_group): [%s]\n", rs.getString("work_group"));
+        System.out.printf("rs.getString(work_text): [%s]\n", rs.getString("work_text"));
         valmap.put(rs.getString("work_group"),rs.getString("work_text"));
       }
     } catch (SQLException e) {
@@ -108,7 +118,7 @@ public class DBinterface {
   
   private Connection connect() {
     // SQLite connection string
-    String url = "jdbc:sqlite:test.db";
+    String url = "jdbc:sqlite:/var/lib/tomcat8/webapps/cs3750-group-edit/WEB-INF/src/database/test.db";
     conn = null;
     try {
       conn = DriverManager.getConnection(url);

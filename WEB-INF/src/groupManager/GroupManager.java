@@ -69,15 +69,25 @@ public class GroupManager
   {
     String oldGroup = userToGroupMap.get(user);
     userToGroupMap.put(user, group);
+    System.out.printf("GroupManager.onSetGroup - Old Group: %s\n", oldGroup);
     if(oldGroup != null)
     {
       groupToUserListMap.get(oldGroup).remove(user);
     }
+    System.out.printf("GroupManager.onSetGroup - .get(%s) is null: %s\n", group, groupToUserListMap.get(group) == null ? "YES" : "NO");
     if(groupToUserListMap.get(group) == null)
     {
+      System.out.println("New group: WHY ARE YOU HERE?\n");
       groupToUserListMap.put(group, new ArrayList<>());
     }
+    System.out.printf("Adding user [%s] to group [%s]\n", user.getId(), group);
     groupToUserListMap.get(group).add(user);
+    System.out.printf("GroupManager.onSetGroup - Group list should not be null: %s\n", groupToUserListMap.get(group) == null ? "IS NULL" : "IS NOT NULL");
+    System.out.printf("GroupManager.onSetGroup - Number of users in group [%s]: %d\n", group, groupToUserListMap.get(group).size());
+    for(Session userInGroup : groupToUserListMap.get(group))
+    {
+      System.out.printf("Printing user [%s] from group [%s]\n", userInGroup.getId(), group);
+    }
   }
 
   public boolean onLockTextArea(Session user, int textAreaNumber)

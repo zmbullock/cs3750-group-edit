@@ -20,7 +20,7 @@ public class DatabaseCreator
         for(int j = 1; j <= 4; j++)
         {
           work_group = String.format("%c%d", i, j);
-          statement.executeUpdate(String.format("INSERT INTO Content VALUES('%s', '%s')", work_group, work_text));
+          statement.executeUpdate(String.format("INSERT INTO Content VALUES('%s', '%s')", work_text, work_group));
         }
       }
     }

@@ -10,6 +10,9 @@ public class DatabaseManager
 
   public boolean updateText(String groupName, int textAreaNumber, String text)
   {
+    System.out.printf("updateText - groupName: [%s]\n", groupName);
+    System.out.printf("updateText - textAreaNumber: [%d]\n", textAreaNumber);
+    System.out.printf("updateText - text: [%s]\n", text);
     db.update(groupName + textAreaNumber, text);
 
     // add error checking
@@ -26,6 +29,10 @@ public class DatabaseManager
   public String getText(String groupName, int textAreaNumber)
   {
     String groupTextArea = groupName + textAreaNumber;
-    return db.get(groupTextArea).get(groupTextArea);
+    System.out.printf("getText - groupName: [%s]\n", groupName);
+    System.out.printf("getText - textAreaNumber: [%d]\n", textAreaNumber);
+    String rString = db.get(groupTextArea).get(groupTextArea);
+    System.out.printf("getText - rString: [%s]\n", rString);
+    return rString;
   }
 }
